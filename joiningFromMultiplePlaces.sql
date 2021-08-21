@@ -95,3 +95,20 @@ JOIN clients c
 USING(client_id)
 JOIN payment_methods pm
 	ON pm.payment_method_id = p.payment_id;
+    
+-- Join two full tables using explicit syntax CROSS JOIN
+SELECT *
+FROM customers
+CROSS JOIN orders
+ORDER BY first_name;
+
+SELECT *
+FROM products
+CROSS JOIN shippers;
+-- Join two full tables using implicit syntax FROM
+SELECT *
+FROM customers, orders
+ORDER BY first_name;
+
+SELECT *
+FROM products, shippers;
