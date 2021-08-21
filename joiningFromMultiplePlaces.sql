@@ -5,6 +5,11 @@ FROM orders o
 JOIN customers c
 	ON o.customer_id = c.customer_id; 
     
+-- Implicit Join syntax
+SELECT *
+FROM orders o, customers c
+WHERE o.customer_id = c.customer_id;
+    
 SELECT order_id, oi.product_id, quantity, oi.unit_price
 FROM order_items oi
 JOIN products p 
