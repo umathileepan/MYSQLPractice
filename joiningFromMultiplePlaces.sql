@@ -37,3 +37,9 @@ JOIN clients c
 	ON p.client_id = c.client_id
 JOIN payment_methods pm 
 	ON pm.payment_method_id = p.payment_method;
+
+SELECT *
+FROM order_items oi
+JOIN order_item_notes oin
+	ON oi.order_id = oin.order_id
+    AND oi.product_id = oin.product_id;
