@@ -44,3 +44,34 @@ FROM invoices i
 JOIN clients c 
 USING(client_id)
 WHERE payment_date IS NOT NULL;
+
+UPDATE invoices
+SET payment_total = 10, payment_date = '2021-01-01'
+WHERE invoice_id = 1;
+
+UPDATE invoices
+SET payment_total = invoice_total * 0.5, payment_date = due_date
+WHERE invoice_id = 3;
+
+UPDATE customers
+SET points = points + 50
+WHERE birth_date < '1990-01-01';
+
+-- Using sub queries in UPDATE statement
+UPDATE invoices
+SET payment_total = invoice_total * 0.5, payment_date = due_date
+WHERE invoice_id = 
+		(SELECT client_id
+		 FROM clients
+		 WHERE name = 'Myworks');
+         
+UPDATE invoices
+SET payment_total = invoice_total * 0.5, payment_date = due_date
+WHERE client_id IN 
+			(SELECT client_id
+            FROM clients
+            WHERE state IN ('CA', 'NY'));
+            
+DELETE FROM invoices
+WHERE invoice_id = 1;
+
