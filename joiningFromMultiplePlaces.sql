@@ -74,3 +74,10 @@ SELECT e.employee_id, e.first_name, m.first_name AS manager
 FROM employees e
 LEFT JOIN employees m
 	ON e.reports_to = m.employee_id;
+    
+SELECT o.order_date,o.order_id, c.first_name, s.name AS shippers
+FROM orders o 
+JOIN customers c 
+	USING(customer_id)
+LEFT JOIN shippers s
+	USING(shipper_id);
