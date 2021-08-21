@@ -68,3 +68,9 @@ LEFT JOIN shippers s
 	ON o.shipper_id = s.shipper_id
 JOIN order_statuses os
 	ON o.status = os.order_status_id;
+    
+-- Self Outer join
+SELECT e.employee_id, e.first_name, m.first_name AS manager 
+FROM employees e
+LEFT JOIN employees m
+	ON e.reports_to = m.employee_id;
