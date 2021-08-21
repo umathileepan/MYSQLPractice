@@ -74,10 +74,24 @@ SELECT e.employee_id, e.first_name, m.first_name AS manager
 FROM employees e
 LEFT JOIN employees m
 	ON e.reports_to = m.employee_id;
-    
+
+-- Using clause
 SELECT o.order_date,o.order_id, c.first_name, s.name AS shippers
 FROM orders o 
 JOIN customers c 
 	USING(customer_id)
 LEFT JOIN shippers s
 	USING(shipper_id);
+    
+-- Using clause with composite key
+SELECT *
+FROM order_items oi
+JOIN order_item_notes oin
+	USING(order_id,product_id);
+    
+SELECT p.date, c.name AS client, p.amount, pm.name
+FROM payments p 
+JOIN clients c
+USING(client_id)
+JOIN payment_methods pm
+	ON pm.payment_method_id = p.payment_id;
