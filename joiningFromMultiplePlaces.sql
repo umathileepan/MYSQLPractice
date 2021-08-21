@@ -48,3 +48,23 @@ FROM order_items oi
 JOIN order_item_notes oin
 	ON oi.order_id = oin.order_id
     AND oi.product_id = oin.product_id;
+    
+-- Outer join
+SELECT c.customer_id, c.first_name, O.order_id
+FROM customers c
+RIGHT JOIN orders o 
+	ON c.customer_id = o.order_id;
+    
+SELECT *
+FROM products p 
+LEFT JOIN order_items oi
+	ON p.product_id = oi.product_id;
+    
+SELECT o.order_date,o.order_id, c.first_name, s.name AS shippers, os.name AS status
+FROM orders o 
+JOIN customers c 
+	ON o.customer_id = c.customer_id
+LEFT JOIN shippers s
+	ON o.shipper_id = s.shipper_id
+JOIN order_statuses os
+	ON o.status = os.order_status_id;
