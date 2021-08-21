@@ -14,3 +14,10 @@ SELECT *
 FROM order_items oi
 JOIN sql_inventory.products p
 	ON oi.product_id = p.product_id;
+    
+Use sql_hr;
+
+SELECT * 
+FROM employees e
+JOIN employees m
+	ON e.reports_to = m.employee_id;
