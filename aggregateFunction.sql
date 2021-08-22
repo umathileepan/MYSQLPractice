@@ -35,4 +35,36 @@ SELECT
     SUM(payment_total) AS total_payments,
     SUM(invoice_total - payment_total) AS what_we_expect
 FROM invoices
-WHERE invoice_date BETWEEN '2019-01-01' AND '2019-12-31'
+WHERE invoice_date BETWEEN '2019-01-01' AND '2019-12-31';
+
+-- Find total sales for each client
+SELECT 
+	client_id,
+    SUM(invoice_total) AS total_sales
+FROM invoices i 
+WHERE invoice_date >= '2019-07-01'
+GROUP BY client_id
+ORDER BY total_sales DESC;
+
+-- Find total sales for state and city
+SELECT 
+	state,
+    city,
+    SUM(invoice_total) AS total_sales
+FROM invoices i 
+JOIN clients c USING (client_id)
+GROUP BY state, city;
+
+-- Find payment group by date and payment method
+
+SELECT 
+	p.date,
+    pm.name AS payment_method,
+    SUM(p.amount) AS total_payments
+FROM payments p
+JOIN payment_methods pm
+	ON p.payment_method = pm.payment_method_id
+GROUP BY p.date, pm.name
+ORDER BY p.date;
+
+	
