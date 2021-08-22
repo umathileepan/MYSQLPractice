@@ -1,4 +1,5 @@
 USE sql_invoicing;
+USE sql_store;
 
 SELECT 
 	MAX(invoice_total) AS highest,
@@ -67,4 +68,26 @@ JOIN payment_methods pm
 GROUP BY p.date, pm.name
 ORDER BY p.date;
 
-	
+-- Find total sales for each client who has more than certain amount : filter data
+SELECT 
+	client_id,
+    SUM(invoice_total) AS total_sales,
+    COUNT(*) AS number_of_invoices
+FROM invoices i 
+GROUP BY client_id
+HAVING total_sales > 500 AND number_of_invoices > 5;
+
+-- Get the customers located in Virginia who have spent more than $100
+SELECT 
+	c.customer_id,
+	c.first_name,
+    c.last_name,
+    state,
+    SUM(oi.quantity * oi.unit_price) AS total_sales
+FROM customers c
+JOIN orders o USING(customer_id)
+JOIN order_items oi USING(order_id)
+WHERE state = 'VA'
+GROUP BY c.customer_id, c.first_name, c.last_name
+HAVING total_sales > 100;
+
