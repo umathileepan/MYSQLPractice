@@ -69,3 +69,66 @@ BEGIN
 	WHERE i.invoice_id = invoice_id;
 END$$
 DELIMITER ;
+
+USE sql_invoicing;
+DROP procedure IF EXISTS get_unpaid_invoices_for_client;
+
+DELIMITER $$
+USE sql_invoicing$$
+CREATE PROCEDURE get_unpaid_invoices_for_client (client_id INT, OUT invoices_count INT,OUT invoices_total DECIMAL(9,2))
+BEGIN
+	SELECT COUNT(*), SUM(invoice_total)
+    INTO invoices_count, invoices_total
+    FROM invoices i 
+    WHERE i.client_id = client_id
+		AND payment_total = 0;
+END$$
+
+DELIMITER ;
+
+-- User or session variables
+SET @invoices_count = 0;
+
+DELIMITER $$
+CREATE PROCEDURE get_risk_factor()
+BEGIN
+	DECLARE risk_factor DECIMAL(9,2) DEFAULT 0;
+    DECLARE invoices_total DECIMAL(9,2);
+    DECLARE invoices_count INT;
+    
+    SELECT COUNT(*), SUM(invoices_total)
+    INTO invoices_count, invoices_total
+    FROM invoices;
+    
+    SET risk_factor = invoices_total / invoices_count * 5;
+    
+    SELECT risk_factor;
+END$$
+DELIMITER ;
+
+-- Function
+DROP function IF EXISTS `get_risk_factor_for_client`;
+
+DELIMITER $$
+CREATE FUNCTION get_risk_factor_for_client (client_id INT)
+RETURNS INTEGER
+READS SQL DATA
+BEGIN
+	DECLARE risk_factor DECIMAL(9,2) DEFAULT 0;
+    DECLARE invoices_total DECIMAL(9,2);
+    DECLARE invoices_count INT;
+    
+    SELECT COUNT(*), SUM(invoices_total)
+    INTO invoices_count, invoices_total
+    FROM invoices i
+    WHERE i.client_id = client_id;
+    
+    SET risk_factor = invoices_total / invoices_count * 5;
+    
+    RETURN risk_factor;
+END$$
+
+DELIMITER ;
+
+SELECT client_id, name, get_risk_factor_for_client(client_id) AS risk_factor
+FROM clients;
