@@ -14,3 +14,14 @@ UPDATE customers
 SET points = 2273
 WHERE customer_id = 1;
 COMMIT;
+
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+START TRANSACTION;
+SELECT * FROM customers WHERE customer_id = 1;
+SELECT * FROM customers WHERE customer_id = 1;
+COMMIT;
+
+SET TRANSACTION ISOLATION LEVEL serializable;
+START TRANSACTION;
+SELECT * FROM customers WHERE customer_id = 1;
+COMMIT;
