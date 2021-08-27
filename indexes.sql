@@ -17,3 +17,9 @@ SET PASSWORD FOR root = 'admin';
 -- Given permission to new user
 CREATE USER uma IDENTIFIED BY '1234';
 GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE ON sql_store.* TO uma;
+
+SELECT * FROM posts WHERE title LIKE '%react redux%' OR body LIKE '%react redux%';
+CREATE FULLTEXT INDEX idx_title_body ON posts(title, body);
+SELECT * FROM posts WHERE MATCH(title,body) AGAINST ('react redux');
+
+SHOW INDEXES IN customers;
