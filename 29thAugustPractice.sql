@@ -66,3 +66,26 @@ SELECT * FROM customers LIMIT 10;
 SELECT * FROM customers LIMIT 6,10;
 
 SELECT * FROM customers ORDER BY points DESC LIMIT 3;
+
+SELECT c.customer_id, order_id, c.first_name, c.last_name  FROM customers c JOIN orders o ON c.customer_id = o.customer_id;
+
+SELECT e.employee_id,e.first_name, m.first_name AS manager FROM employees e JOIN employees m ON e.reports_to = m.employee_id;
+
+SELECT o.order_id, o.order_date, c.first_name, c.last_name, os.name AS status FROM orders o JOIN customers c ON o.customer_id = c.customer_id 
+				JOIN order_statuses os ON o.status = os.order_status_id;
+                
+SELECT p.date, p.invoice_id,p.amount, c.name, pm.name AS payment_method FROM payments p JOIN clients c ON p.client_id = c.client_id JOIN payment_methods pm ON p.payment_method = pm.payment_method_id;
+
+SELECT p.product_id , p.name, oi.quantity FROM products p LEFT JOIN order_items oi ON p.product_id = oi.product_id;  
+
+SELECT client_id, SUM(invoice_total) AS total_sales FROM invoices GROUP BY client_id;
+
+SELECT client_id, SUM(invoice_total) AS total_sales FROM invoices GROUP BY client_id HAVING total_sales > 500;
+
+SELECT client_id, SUM(invoice_total) AS total_sales, COUNT(*) AS number_of_invoices FROM invoices GROUP BY client_id
+ HAVING total_sales > 500 AND number_of_invoices > 5;
+
+SELECT c.first_name, c.state, SUM(unit_price * quantity) AS total  FROM orders o JOIN customers c USING (customer_id) 
+	JOIN order_items oi USING (order_id) GROUP BY state HAVING state = 'VA' AND total > 100;
+    
+SELECT pm.name AS payment_method, SUM(amount) AS total FROM payments p JOIN payment_methods pm ON p.payment_method =pm.payment_method_id GROUP BY pm.name WITH ROLLUP;
