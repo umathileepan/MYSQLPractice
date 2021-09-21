@@ -89,3 +89,14 @@ SELECT c.first_name, c.state, SUM(unit_price * quantity) AS total  FROM orders o
 	JOIN order_items oi USING (order_id) GROUP BY state HAVING state = 'VA' AND total > 100;
     
 SELECT pm.name AS payment_method, SUM(amount) AS total FROM payments p JOIN payment_methods pm ON p.payment_method =pm.payment_method_id GROUP BY pm.name WITH ROLLUP;
+
+SELECT * FROM employees WHERE salary > (SELECT AVG(salary) FROM employees);
+
+SELECT p.product_id FROM products p WHERE p.product_id NOT IN (SELECT DISTINCT oi.product_id FROM order_items oi);
+
+SELECT * FROM clients WHERE client_id NOT IN (SELECT DISTINCT client_id FROM invoices);
+
+SELECT customer_id, first_name, last_name FROM customers WHERE customer_id IN (SELECT customer_id FROM order_items JOIN orders USING (order_id) where product_id = 3);
+
+SELECT DISTINCT customer_id, first_name, last_name FROM customers c JOIN orders o USING (customer_id) JOIN order_items oi USING(order_id) WHERE oi.product_id = 3;
+
